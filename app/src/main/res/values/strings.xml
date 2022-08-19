@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">Save Locations</string>
+    <string name="rationale_camera">This app needs access to your camera so you can take pictures.</string>
+    <string name="enable_gps">enable gps</string>
+    <string name="required_for_this_app">Required for this app</string>
+    <string name="enable_now">enable now</string>
+    <string name="save_location">save location</string>
+    <string name="location_permission_not_granted">location_permission_not_granted</string>
+    <string name="travel_to">Travel To</string>
+    <string name="appwidget_text">Save location</string>
+    <string name="add_widget">Add widget</string>
+</resources>
