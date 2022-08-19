@@ -32,8 +32,6 @@ class Save_Location_Activity : AppCompatActivity() {
 
         println("this is contained in my second commit")
 
-        Log.i(oihohph,ogogog)
-
 
 
         save_.setOnClickListener {
