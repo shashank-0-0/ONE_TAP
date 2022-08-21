@@ -31,7 +31,8 @@ class Save_Location_Activity : AppCompatActivity() {
         setContentView(R.layout.fragment_a)
 
         println("this is contained in my second commit")
-        println("experimenral")
+        println("experimental")
+        println("experimental commit 2")
 
 
 
