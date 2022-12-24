@@ -1,25 +1,16 @@
 package android.example.atry
 
-import android.Manifest
-import android.content.pm.PackageManager
 import android.os.Bundle
-import android.os.Looper
-import android.os.PersistableBundle
 import android.util.Log
-import android.widget.Toast
+import android.view.View
+import android.widget.ProgressBar
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.app.ActivityCompat
-import androidx.core.widget.doOnTextChanged
-import androidx.fragment.app.viewModels
-import com.google.android.gms.location.LocationCallback
-import com.google.android.gms.location.LocationRequest
-import com.google.android.gms.location.LocationResult
-import com.google.android.gms.location.LocationServices
-import com.google.android.gms.tasks.CancellationToken
-import com.google.android.gms.tasks.OnTokenCanceledListener
+import androidx.lifecycle.lifecycleScope
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.android.synthetic.main.fragment_a.*
+import kotlinx.android.synthetic.main.save_location_activity.*
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class Save_Location_Activity : AppCompatActivity() {
@@ -28,33 +19,28 @@ class Save_Location_Activity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.fragment_a)
+        setContentView(R.layout.save_location_activity)
 
-        println("this is contained in my second commit")
-
-        println("change 4")
-
-
-
-
-        save_.setOnClickListener {
-            val userEnteredname =outlinedTextField.editText?.text.toString()
-            Log.i("#@#","Save location clicked")
-            myviewmodel.save_location(userEnteredname){
-                if(it==1){
-                    Toast.makeText(this, "Location Saved", Toast.LENGTH_LONG).show()
-                }else{
-                    Toast.makeText(this, "Some error occured ", Toast.LENGTH_LONG).show()
-                }
-
+        lifecycleScope.launch {
+            myviewmodel.save_task_event.collectLatest {
+                progressBar.progress=100
+                progressBar.visibility=View.GONE
                 finish()
                 overridePendingTransition(R.anim.nothing,R.anim.slide_out)
             }
         }
 
 
+        save_.setOnClickListener {
+            val userEnteredname =outlinedTextField.editText?.text.toString()
+            save_.isEnabled=false
+            progressBar.visibility= View.VISIBLE
+            Log.i("#@#","Save location clicked")
+            myviewmodel.fetch_location(userEnteredname)
 
+        }
     }
+
 
     override fun onBackPressed() {
         super.onBackPressed()

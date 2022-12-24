@@ -8,6 +8,12 @@ import android.os.Looper
 import android.util.Log
 import androidx.lifecycle.LiveData
 import com.google.android.gms.location.*
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.channels.awaitClose
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.callbackFlow
+import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 
 
@@ -20,31 +26,38 @@ constructor(
 
 
 
-
+    @OptIn(ExperimentalCoroutinesApi::class)
     @SuppressLint("MissingPermission")
-    override fun fetch_location(callback: (Location?) -> Unit) {
+    override fun fetch_location() = callbackFlow<Location> {
         Log.i("#@#","start of fetch location ")
 
         val locationRequest = LocationRequest().setInterval(2000).setFastestInterval(2000)
             .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
         var _location : Location? = null
+
+        val location_callback =object : LocationCallback() {
+            override fun onLocationResult(locationResult: LocationResult) {
+                super.onLocationResult(locationResult)
+                for (location in locationResult.locations) {
+
+                    Log.i("#@#","got location updates ${location.latitude} ")
+                    _location=location
+//                        callback(location)
+
+                    offer(location)
+                }
+                fusedLocationProviderClient.removeLocationUpdates(this)
+            }
+        }
+
         fusedLocationProviderClient.requestLocationUpdates(
             locationRequest,
-            object : LocationCallback() {
-                override fun onLocationResult(locationResult: LocationResult) {
-                    super.onLocationResult(locationResult)
-                    for (location in locationResult.locations) {
-
-                        Log.i("#@#","got location updates ${location.latitude} ")
-                        _location=location
-                        callback(location)
-                    }
-                    fusedLocationProviderClient.removeLocationUpdates(this)
-
-                }
-            },
+            location_callback,
             Looper.myLooper()!!
         )
+        awaitClose {
+            fusedLocationProviderClient.removeLocationUpdates(location_callback)
+        }
         Log.i("#@#","end of fetch location")
 
     }
@@ -58,7 +71,7 @@ constructor(
     }
 
 
-    override suspend fun all_locations(dao:LocationDao): LiveData<List<android.example.atry.Room.myLocation>> {
+    override suspend fun all_locations(dao:LocationDao): Flow<List<myLocation>> {
         return  dao.loadallLocation()
     }
 

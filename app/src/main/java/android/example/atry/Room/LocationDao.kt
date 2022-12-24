@@ -2,12 +2,13 @@ package android.example.atry.Room
 
 import androidx.lifecycle.LiveData
 import androidx.room.*
+import kotlinx.coroutines.flow.Flow
 
 
 @Dao
 interface LocationDao  {
     @Query("SELECT * FROM location ")
-    fun loadallLocation(): LiveData<List<myLocation>>
+    fun loadallLocation(): Flow<List<myLocation>>
 
     @Insert(onConflict = OnConflictStrategy.ABORT)
     suspend fun insertnewLocation(location: myLocation?)
@@ -18,9 +19,5 @@ interface LocationDao  {
     @Delete
     suspend fun deleteLocation(location: myLocation?)
 
-//    @Query("DELETE FROM Movie WHERE Title = :title")
-//    fun deleteByTitle(title: String?): Int
-//
-//    @Query("SELECT flag FROM Movie Where Title=:title")
-//    fun getflagfromdb(title: String?): Int
+
 }

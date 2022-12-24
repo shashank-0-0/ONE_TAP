@@ -1,15 +1,13 @@
 package android.example.atry
 
 
-//import android.example.atry.unused.fragmentA
+
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.example.atry.Room.myLocation
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
-import android.view.Menu
-import android.view.MenuItem
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -18,11 +16,9 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.google.android.gms.location.*
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.item_recycler_view.*
-import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import java.util.*
 
@@ -30,12 +26,9 @@ import java.util.*
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity(),LifecycleObserver,location_Adapter.OnClickHandler {
 
-
-
-    private lateinit var padapter: location_Adapter
+    private lateinit var madapter: location_Adapter
 
     private val myviewmodel: myviewmodel by viewModels()
-
 
     companion object {
         private const val LOCATION_PERMISSION_REQUEST_CODE = 999
@@ -64,11 +57,8 @@ class MainActivity : AppCompatActivity(),LifecycleObserver,location_Adapter.OnCl
                                 this,
                                 Save_Location_Activity::class.java
                             )
-
                             startActivity(intentToStartDetailActivity)
                             overridePendingTransition(R.anim.slide_in,R.anim.nothing)
-
-
                         }
                         else -> {
 
@@ -86,9 +76,6 @@ class MainActivity : AppCompatActivity(),LifecycleObserver,location_Adapter.OnCl
                     )
                 }
             }
-
-
-
         }
         Log.i("!@!", "above pressed travel to ")
 
@@ -96,9 +83,10 @@ class MainActivity : AppCompatActivity(),LifecycleObserver,location_Adapter.OnCl
     private fun init_recyclerview() {
         recyclerview_fragmentc?.apply {
             layoutManager = LinearLayoutManager(this.context, RecyclerView.VERTICAL, false)
-            padapter = location_Adapter(this@MainActivity)
-            adapter = padapter
+            madapter = location_Adapter(this@MainActivity)
+            adapter = madapter
         }
+        //swipe functionality of recycler view items
         val simpleItemTouchCallback: ItemTouchHelper.SimpleCallback = object :
             ItemTouchHelper.SimpleCallback(0,
                 ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT) {
@@ -109,28 +97,28 @@ class MainActivity : AppCompatActivity(),LifecycleObserver,location_Adapter.OnCl
             ): Boolean {
                 return false
             }
-
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, swipeDir: Int) {
 
                 //Remove swiped item from list and notify the RecyclerView
                 val position = viewHolder.adapterPosition
                 lifecycleScope.launch {
-                    myviewmodel.delete_location(padapter.getlocation().get(position))
+                    myviewmodel.deleteLocation(madapter.getlocation().get(position))
                 }
-                Toast.makeText(applicationContext, "Deleted ${padapter.getlocation().get(position).name}", Toast.LENGTH_SHORT)
+                Toast.makeText(applicationContext, "Deleted ${madapter.getlocation().get(position).name}", Toast.LENGTH_SHORT)
                     .show()
             }
-
         }
         val itemTouchHelper = ItemTouchHelper(simpleItemTouchCallback)
         itemTouchHelper.attachToRecyclerView(recyclerview_fragmentc)
     }
 
     private fun adddataset() {
-        myviewmodel._location?.observe(this, {
-            Log.i("!@!", "came ${it.size}")
-            padapter.difer.submitList(it)
-        })
+        lifecycleScope.launch{
+            myviewmodel.location.collectLatest {
+                Log.i("#@#", "collected ${it.size}")
+                madapter.difer.submitList(it)
+            }
+        }
     }
 
 
@@ -143,7 +131,6 @@ class MainActivity : AppCompatActivity(),LifecycleObserver,location_Adapter.OnCl
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         Log.i("!@!", "yooooo")
         when (requestCode) {
-
             LOCATION_PERMISSION_REQUEST_CODE -> {
                 Log.i("!@!", "yooooo 1")
 
@@ -155,7 +142,6 @@ class MainActivity : AppCompatActivity(),LifecycleObserver,location_Adapter.OnCl
                         PermissionUtils.isLocationEnabled(this) -> {
                             Log.i("!@!", "yooooo 3")
                             //DO something if you want to
-
                         }
                         else -> {
                             Log.i("!@!", "yooooo 4")
@@ -176,7 +162,6 @@ class MainActivity : AppCompatActivity(),LifecycleObserver,location_Adapter.OnCl
     }
 
 
-
     override fun onClick(m: myLocation?) {
         Log.i("!@!", "pressed travel to")
         val uri = java.lang.String.format(
@@ -187,7 +172,7 @@ class MainActivity : AppCompatActivity(),LifecycleObserver,location_Adapter.OnCl
         )
         val intent = Intent(Intent.ACTION_VIEW, Uri.parse(uri))
         startActivity(intent)
-//        Toast.makeText(this,"${m?.lattitude}",Toast.LENGTH_SHORT).show()
+
     }
 
 

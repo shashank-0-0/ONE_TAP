@@ -36,17 +36,7 @@
                 android:name="android.app.default_searchable"
                 android:value=".searchableActivity" />
         </activity>
-        <activity
-            android:name=".unwantedfiles.SearchableActvity"
-            android:launchMode="singleTop">
-            <intent-filter>
-                <action android:name="android.intent.action.SEARCH" />
-            </intent-filter>
 
-            <meta-data
-                android:name="android.app.searchable"
-                android:resource="@xml/searchable" />
-        </activity>
         <activity android:name=".Save_Location_Activity"></activity>
     </application>
 
