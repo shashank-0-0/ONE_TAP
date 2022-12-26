@@ -14,7 +14,13 @@
         // for disabling the action bar because i've set it with toolbar in l
         <item name="windowNoTitle">true</item>
 
-
+    </style>
+    <style name="TransparentCompat" parent="@style/Theme.AppCompat.Light.NoActionBar">
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:colorBackgroundCacheHint">@null</item>
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowAnimationStyle">@android:style/Animation</item>
     </style>
 
     <style name="NoActionBar" parent="@android:style/Theme.Holo.Light">

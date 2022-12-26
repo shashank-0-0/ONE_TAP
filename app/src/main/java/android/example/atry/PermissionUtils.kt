@@ -13,6 +13,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import com.google.android.gms.location.LocationRequest
 
 object PermissionUtils {
 
@@ -60,6 +61,21 @@ object PermissionUtils {
                 context.startActivity(Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS))
             }
             .show()
+    }
+    fun getcity(location: Location?, geocoder: Geocoder): String {
+        var address = ""
+        location?.let {
+
+            val addresses = geocoder.getFromLocation(location.latitude, location.longitude, 1)
+            val city = addresses?.get(0)?.locality
+            val state = addresses?.get(0)?.adminArea
+            val subarea = addresses?.get(0)?.subLocality
+            Log.i("QWE", addresses?.get(0)?.subLocality.toString())
+            address = subarea + "," + city
+        }
+        Log.i("QWE", "$address")
+
+        return address
     }
 
 

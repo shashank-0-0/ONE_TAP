@@ -6,6 +6,7 @@ import android.example.atry.Room.myLocation
 import android.location.Location
 import android.os.Looper
 import android.util.Log
+import android.widget.Toast
 import androidx.lifecycle.LiveData
 import com.google.android.gms.location.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -42,7 +43,8 @@ constructor(
 
                     Log.i("#@#","got location updates ${location.latitude} ")
                     _location=location
-//                        callback(location)
+//                    Toast.makeText(t,"got location", Toast.LENGTH_SHORT).show()
+
 
                     offer(location)
                 }
@@ -53,7 +55,7 @@ constructor(
         fusedLocationProviderClient.requestLocationUpdates(
             locationRequest,
             location_callback,
-            Looper.myLooper()!!
+            Looper.getMainLooper()
         )
         awaitClose {
             fusedLocationProviderClient.removeLocationUpdates(location_callback)

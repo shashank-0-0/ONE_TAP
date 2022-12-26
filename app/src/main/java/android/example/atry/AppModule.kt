@@ -1,5 +1,6 @@
 package android.example.atry
 
+import android.app.Application
 import android.content.Context
 import android.example.myapplication.Repository.location_repository
 import android.example.myapplication.Repository.location_repository_implementation
@@ -53,6 +54,8 @@ object AppModule {
     ):Geocoder{
         return Geocoder(context, Locale.getDefault())
     }
+
+
 
 
 }

@@ -5,6 +5,7 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
 
     <application
         android:name=".BaseApplication"
@@ -13,7 +14,7 @@
         android:roundIcon="@drawable/icon"
         android:supportsRtl="true"
         android:theme="@style/Theme.Try">
-        <receiver android:name=".NewAppWidget"
+        <receiver android:name=".MyWidget"
             android:exported="false">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
@@ -28,7 +29,6 @@
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <action android:name="android.intent.action.SEARCH" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
 
@@ -38,6 +38,13 @@
         </activity>
 
         <activity android:name=".Save_Location_Activity"></activity>
+
+        <activity android:name=".widgetActivity"
+            android:theme="@style/TransparentCompat"
+            android:launchMode="singleTask"
+            />
+
+        <service android:name=".saveLocationService"/>
     </application>
 
 </manifest>

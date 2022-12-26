@@ -1,9 +1,11 @@
 package android.example.atry
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.ProgressBar
+import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
@@ -15,7 +17,7 @@ import kotlinx.coroutines.launch
 @AndroidEntryPoint
 class Save_Location_Activity : AppCompatActivity() {
 
-    public val myviewmodel: myviewmodel by viewModels()
+    private val myviewmodel: myviewmodel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -25,22 +27,22 @@ class Save_Location_Activity : AppCompatActivity() {
             myviewmodel.save_task_event.collectLatest {
                 progressBar.progress=100
                 progressBar.visibility=View.GONE
+                Toast.makeText(this@Save_Location_Activity,"LOCATION SAVED",Toast.LENGTH_SHORT).show()
                 finish()
                 overridePendingTransition(R.anim.nothing,R.anim.slide_out)
             }
         }
-
 
         save_.setOnClickListener {
             val userEnteredname =outlinedTextField.editText?.text.toString()
             save_.isEnabled=false
             progressBar.visibility= View.VISIBLE
             Log.i("#@#","Save location clicked")
-            myviewmodel.fetch_location(userEnteredname)
-
+            lifecycleScope.launch {
+                myviewmodel.fetch_location(userEnteredname)
+            }
         }
     }
-
 
     override fun onBackPressed() {
         super.onBackPressed()

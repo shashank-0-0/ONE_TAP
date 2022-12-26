@@ -1,7 +1,5 @@
 package android.example.atry
 
-
-
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.example.atry.Room.myLocation
@@ -38,38 +36,28 @@ class MainActivity : AppCompatActivity(),LifecycleObserver,location_Adapter.OnCl
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        Log.i("!@!", "ek hi baar")
 
         init_recyclerview()
         adddataset()
 
         save_location_cards_view.setOnClickListener {
-            Log.i("!@!", "pressed")
             when {
                 PermissionUtils.isAccessFineLocationGranted(this) -> {
-                    Log.i("!@!", "finelocation granted")
                     when {
                         PermissionUtils.isLocationEnabled(this) -> {
-                            Log.i("!@!", "is location enabled")
 
-                            //requesting location update
-                            val intentToStartDetailActivity = Intent(
-                                this,
-                                Save_Location_Activity::class.java
-                            )
-                            startActivity(intentToStartDetailActivity)
+                            val intent=Intent(this,Save_Location_Activity::class.java)
+                            startActivity(intent)
+
                             overridePendingTransition(R.anim.slide_in,R.anim.nothing)
                         }
                         else -> {
-
-                            Log.i("!@!", "location not enabled")
 
                             PermissionUtils.showGPSNotEnabledDialog(this)
                         }
                     }
                 }
                 else -> {
-                    Log.i("!@!", "finelocation not  granted")
                     PermissionUtils.requestAccessFineLocationPermission(
                         this,
                         LOCATION_PERMISSION_REQUEST_CODE
@@ -77,7 +65,6 @@ class MainActivity : AppCompatActivity(),LifecycleObserver,location_Adapter.OnCl
                 }
             }
         }
-        Log.i("!@!", "above pressed travel to ")
 
     }
     private fun init_recyclerview() {

@@ -8,9 +8,11 @@ import android.example.myapplication.Repository.location_repository
 import android.location.Geocoder
 import android.location.Location
 import android.util.Log
+import android.widget.Toast
 import androidx.lifecycle.*
 import com.google.android.gms.location.*
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -50,13 +52,14 @@ constructor(
     }
 
 
-    fun fetch_location(locationName: String) {
+    suspend fun fetch_location(locationName: String="") {
         Log.i("#@#","start of function")
 
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             repository.fetch_location().collectLatest {
                 Log.i("#@#","got the location")
-                var address = getcity(it, geocoder)
+//                Toast.makeText(this,"got it",Toast.LENGTH_SHORT).show();
+                var address = PermissionUtils.getcity(it, geocoder)
                 saveLocation(it, address, locationName)
                 Log.i("#@#","yoo");
                 _save_task_event.emit(1)
@@ -68,7 +71,7 @@ constructor(
 
 
 
-    private suspend fun saveLocation(location: Location?, address: String?, locationName: String?) {
+     suspend fun saveLocation(location: Location?, address: String?, locationName: String?) {
         Log.i("!@!", "start of savelocation")
 
         location?.let {
@@ -82,6 +85,7 @@ constructor(
                     address = address,
                 )
             )
+
         }
     }
     suspend fun deleteLocation(mylocation: myLocation?) {
@@ -95,28 +99,6 @@ constructor(
         }
     }
 
-
-    fun getcity(location: Location?, geocoder: Geocoder): String {
-        var address = ""
-        location?.let {
-            val addresses = geocoder.getFromLocation(location.latitude, location.longitude, 1)
-            val city = addresses?.get(0)?.locality
-            val state = addresses?.get(0)?.adminArea
-            val subarea = addresses?.get(0)?.subLocality
-            Log.i("QWE", addresses?.get(0)?.subLocality.toString())
-            address = subarea + "," + city
-        }
-        Log.i("QWE", "$address")
-
-        return address
-    }
-
-
-
-    override fun onCleared() {
-        super.onCleared()
-        Log.i("#@#", "cleared viewmodel")
-    }
 }
 
 
