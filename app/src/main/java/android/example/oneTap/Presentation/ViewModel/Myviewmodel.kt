@@ -2,10 +2,10 @@ package android.example.oneTap.Presentation.ViewModel
 
 import android.app.Application
 import android.example.oneTap.Utils.PermissionUtils
-import android.example.oneTap.Room.AppDatabse
 import android.example.oneTap.Room.LocationDao
 import android.example.oneTap.Room.myLocation
 import android.example.myapplication.Repository.location_repository
+import android.example.oneTap.Utils.Resource
 import android.location.Geocoder
 import android.location.Location
 import android.util.Log
@@ -32,8 +32,8 @@ constructor(
     private var _location = MutableStateFlow<List<myLocation>>(listOf())
     val location =_location.asStateFlow()
 
-    private val _save_task_event = MutableSharedFlow<Int>()
-    val save_task_event=_save_task_event.asSharedFlow()
+    private val _state = MutableSharedFlow<Resource<String>>()
+    val state=_state.asSharedFlow()
 
 
     init {
@@ -54,13 +54,21 @@ constructor(
         Log.i("#@#","start of function")
 
         viewModelScope.launch(Dispatchers.IO) {
-            repository.fetch_location().collectLatest {
-                Log.i("#@#","got the location")
-//                Toast.makeText(this,"got it",Toast.LENGTH_SHORT).show();
-                var address = PermissionUtils.getcity(it, geocoder)
-                saveLocation(it, address, locationName)
-                Log.i("#@#","yoo");
-                _save_task_event.emit(1)
+            repository.fetch_location().collectLatest { result ->
+                when(result){
+                    is Resource.Success -> {
+                        Log.i("#@#","got the location")
+                        var address = PermissionUtils.getcity(result.data, geocoder)
+                        saveLocation(result.data, address, locationName)
+                        _state.emit(Resource.Success("success"))
+                    }
+                    is Resource.Error -> {
+                        _state.emit(Resource.Error(result.message ?: "some error occured"))
+                    }
+                    is Resource.Loading -> {
+                        _state.emit(Resource.Loading())
+                    }
+                }
             }
             Log.i("#@#","end of coroutine scope")
         }

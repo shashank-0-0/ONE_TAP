@@ -3,6 +3,7 @@ package android.example.myapplication.Repository
 import android.annotation.SuppressLint
 import android.example.oneTap.Room.LocationDao
 import android.example.oneTap.Room.myLocation
+import android.example.oneTap.Utils.Resource
 import android.location.Location
 import android.os.Looper
 import android.util.Log
@@ -22,15 +23,14 @@ constructor(
 ) : location_repository {
 
 
-
     @OptIn(ExperimentalCoroutinesApi::class)
     @SuppressLint("MissingPermission")
-    override fun fetch_location() = callbackFlow<Location> {
+    override fun fetch_location() = callbackFlow<Resource<Location>> {
         Log.i("#@#","start of fetch location ")
+        offer(Resource.Loading())
 
         val locationRequest = LocationRequest().setInterval(2000).setFastestInterval(2000)
             .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
-
 
         val location_callback =object : LocationCallback() {
             override fun onLocationResult(locationResult: LocationResult) {
@@ -39,7 +39,7 @@ constructor(
 
                     Log.i("#@#","got location updates ${location.latitude} ")
 //                    Toast.makeText(t,"got location", Toast.LENGTH_SHORT).show()
-                    offer(location)
+                    offer(Resource.Success(location))
                 }
                 fusedLocationProviderClient.removeLocationUpdates(this)
             }
@@ -49,7 +49,10 @@ constructor(
             locationRequest,
             location_callback,
             Looper.getMainLooper()
-        )
+        ).addOnFailureListener {
+            offer(Resource.Error(it.localizedMessage ?: "error"))
+        }
+
         awaitClose {
             fusedLocationProviderClient.removeLocationUpdates(location_callback)
         }

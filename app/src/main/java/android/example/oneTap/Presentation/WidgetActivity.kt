@@ -48,7 +48,7 @@ class widgetActivity: AppCompatActivity() {
             val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
             notificationManager.notify(NOTIFICATION_ID,buildNotification())
             myviewmodel.fetch_location()
-            myviewmodel.save_task_event.collectLatest {
+            myviewmodel.state.collectLatest {
                 Log.i("#@#","yooooooooooo")
                 notificationManager.cancel(NOTIFICATION_ID)
                 Toast.makeText(this@widgetActivity,"LOCATION SAVED",Toast.LENGTH_SHORT).show()

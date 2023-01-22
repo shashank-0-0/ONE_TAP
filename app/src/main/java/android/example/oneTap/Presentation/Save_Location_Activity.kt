@@ -2,6 +2,7 @@ package android.example.oneTap.Presentation
 
 import android.example.oneTap.Presentation.ViewModel.myviewmodel
 import android.example.oneTap.R
+import android.example.oneTap.Utils.Resource
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -24,19 +25,29 @@ class Save_Location_Activity : AppCompatActivity() {
         setContentView(R.layout.save_location_activity)
 
         lifecycleScope.launch {
-            myviewmodel.save_task_event.collectLatest {
-                progressBar.progress=100
-                progressBar.visibility=View.GONE
-                Toast.makeText(this@Save_Location_Activity,"LOCATION SAVED",Toast.LENGTH_SHORT).show()
-                finish()
-                overridePendingTransition(R.anim.nothing, R.anim.slide_out)
+            myviewmodel.state.collectLatest { result ->
+                when(result){
+                    is Resource.Success ->{
+                        progressBar.progress=100
+                        progressBar.visibility=View.GONE
+                        Toast.makeText(this@Save_Location_Activity,"LOCATION SAVED",Toast.LENGTH_SHORT).show()
+                        finish()
+                        overridePendingTransition(R.anim.nothing, R.anim.slide_out)
+                    }
+                    is Resource.Error ->{
+                        progressBar.visibility=View.GONE
+                        Toast.makeText(this@Save_Location_Activity,"${result.message}",Toast.LENGTH_SHORT).show()
+                    }
+                    is Resource.Loading ->{
+                        progressBar.visibility= View.VISIBLE
+                    }
+                }
             }
         }
 
         save_.setOnClickListener {
             val userEnteredname =outlinedTextField.editText?.text.toString()
             save_.isEnabled=false
-            progressBar.visibility= View.VISIBLE
             Log.i("#@#","Save location clicked")
             lifecycleScope.launch {
                 myviewmodel.fetch_location(userEnteredname)
