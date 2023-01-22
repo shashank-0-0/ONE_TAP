@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="android.example.atry">
+    package="android.example.oneTap">
 
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.INTERNET" />
@@ -8,13 +8,12 @@
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
 
     <application
-        android:name=".BaseApplication"
+        android:name="android.example.oneTap.BaseApplication"
         android:allowBackup="true"
         android:label="@string/app_name"
-        android:roundIcon="@drawable/icon"
         android:supportsRtl="true"
         android:theme="@style/Theme.Try">
-        <receiver android:name=".MyWidget"
+        <receiver android:name="android.example.oneTap.MyWidget"
             android:exported="false">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
@@ -25,7 +24,7 @@
                 android:resource="@xml/new_app_widget_info" />
         </receiver>
 
-        <activity android:name=".MainActivity">
+        <activity android:name="android.example.oneTap.Presentation.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <action android:name="android.intent.action.SEARCH" />
@@ -37,9 +36,9 @@
                 android:value=".searchableActivity" />
         </activity>
 
-        <activity android:name=".Save_Location_Activity"></activity>
+        <activity android:name="android.example.oneTap.Presentation.Save_Location_Activity"></activity>
 
-        <activity android:name=".widgetActivity"
+        <activity android:name="android.example.oneTap.Presentation.widgetActivity"
             android:theme="@style/TransparentCompat"
             android:launchMode="singleTask"
             />

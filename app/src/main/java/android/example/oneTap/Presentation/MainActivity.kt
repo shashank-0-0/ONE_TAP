@@ -1,8 +1,11 @@
-package android.example.atry
+package android.example.oneTap.Presentation
 
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.example.atry.Room.myLocation
+import android.example.oneTap.Utils.PermissionUtils
+import android.example.oneTap.Presentation.ViewModel.myviewmodel
+import android.example.oneTap.R
+import android.example.oneTap.Room.myLocation
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
@@ -22,7 +25,7 @@ import java.util.*
 
 
 @AndroidEntryPoint
-class MainActivity : AppCompatActivity(),LifecycleObserver,location_Adapter.OnClickHandler {
+class MainActivity : AppCompatActivity(),LifecycleObserver, location_Adapter.OnClickHandler {
 
     private lateinit var madapter: location_Adapter
 
@@ -46,10 +49,10 @@ class MainActivity : AppCompatActivity(),LifecycleObserver,location_Adapter.OnCl
                     when {
                         PermissionUtils.isLocationEnabled(this) -> {
 
-                            val intent=Intent(this,Save_Location_Activity::class.java)
+                            val intent=Intent(this, Save_Location_Activity::class.java)
                             startActivity(intent)
 
-                            overridePendingTransition(R.anim.slide_in,R.anim.nothing)
+                            overridePendingTransition(R.anim.slide_in, R.anim.nothing)
                         }
                         else -> {
 
@@ -159,7 +162,6 @@ class MainActivity : AppCompatActivity(),LifecycleObserver,location_Adapter.OnCl
         )
         val intent = Intent(Intent.ACTION_VIEW, Uri.parse(uri))
         startActivity(intent)
-
     }
 
 

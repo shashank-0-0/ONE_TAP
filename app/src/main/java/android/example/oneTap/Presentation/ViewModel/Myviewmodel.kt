@@ -1,14 +1,14 @@
-package android.example.atry
+package android.example.oneTap.Presentation.ViewModel
 
 import android.app.Application
-import android.example.atry.Room.AppDatabse
-import android.example.atry.Room.LocationDao
-import android.example.atry.Room.myLocation
+import android.example.oneTap.Utils.PermissionUtils
+import android.example.oneTap.Room.AppDatabse
+import android.example.oneTap.Room.LocationDao
+import android.example.oneTap.Room.myLocation
 import android.example.myapplication.Repository.location_repository
 import android.location.Geocoder
 import android.location.Location
 import android.util.Log
-import android.widget.Toast
 import androidx.lifecycle.*
 import com.google.android.gms.location.*
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -25,9 +25,9 @@ constructor(
     private val repository: location_repository,
     private val client: FusedLocationProviderClient,
     private val geocoder: Geocoder,
+    private val dao: LocationDao
 ) : AndroidViewModel(app) {
 
-    var dao: LocationDao
 
     private var _location = MutableStateFlow<List<myLocation>>(listOf())
     val location =_location.asStateFlow()
@@ -37,12 +37,10 @@ constructor(
 
 
     init {
-        dao = AppDatabse.getdatabase(app).getLocationdao()
         getsavedmovies(dao)
     }
 
     fun getsavedmovies(dao: LocationDao) {
-
         viewModelScope.launch {
              repository.all_locations(dao)?.collectLatest {
                  Log.i("#@#","got movies")

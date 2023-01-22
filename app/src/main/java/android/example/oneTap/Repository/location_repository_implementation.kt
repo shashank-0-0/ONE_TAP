@@ -1,20 +1,16 @@
 package android.example.myapplication.Repository
 
 import android.annotation.SuppressLint
-import android.example.atry.Room.LocationDao
-import android.example.atry.Room.myLocation
+import android.example.oneTap.Room.LocationDao
+import android.example.oneTap.Room.myLocation
 import android.location.Location
 import android.os.Looper
 import android.util.Log
-import android.widget.Toast
-import androidx.lifecycle.LiveData
 import com.google.android.gms.location.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.channels.awaitClose
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
-import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 
 
@@ -34,7 +30,7 @@ constructor(
 
         val locationRequest = LocationRequest().setInterval(2000).setFastestInterval(2000)
             .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
-        var _location : Location? = null
+
 
         val location_callback =object : LocationCallback() {
             override fun onLocationResult(locationResult: LocationResult) {
@@ -42,10 +38,7 @@ constructor(
                 for (location in locationResult.locations) {
 
                     Log.i("#@#","got location updates ${location.latitude} ")
-                    _location=location
 //                    Toast.makeText(t,"got location", Toast.LENGTH_SHORT).show()
-
-
                     offer(location)
                 }
                 fusedLocationProviderClient.removeLocationUpdates(this)
@@ -71,7 +64,6 @@ constructor(
     override suspend fun insert(dao:LocationDao, location: myLocation) {
         dao.insertnewLocation(location)
     }
-
 
     override suspend fun all_locations(dao:LocationDao): Flow<List<myLocation>> {
         return  dao.loadallLocation()

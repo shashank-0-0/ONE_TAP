@@ -1,9 +1,10 @@
-package android.example.atry
+package android.example.oneTap.Utils
 
 import android.Manifest
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.example.oneTap.R
 import android.location.Geocoder
 import android.location.Location
 import android.location.LocationManager
@@ -13,7 +14,6 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import com.google.android.gms.location.LocationRequest
 
 object PermissionUtils {
 

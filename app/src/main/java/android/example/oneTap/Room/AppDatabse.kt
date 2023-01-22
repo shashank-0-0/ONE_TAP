@@ -1,5 +1,5 @@
 
-package android.example.atry.Room
+package android.example.oneTap.Room
 
 import android.content.Context
 import androidx.room.Database
@@ -7,7 +7,7 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 
 
-@Database(entities = arrayOf(myLocation::class), version = 2, exportSchema = false)
+@Database(entities = arrayOf(myLocation::class), version = 3, exportSchema = false)
 public abstract class AppDatabse : RoomDatabase() {
     abstract fun getLocationdao(): LocationDao
 
@@ -16,7 +16,6 @@ public abstract class AppDatabse : RoomDatabase() {
         @Volatile
         private var sInstance: AppDatabse? = null
         private const val DATABASE_NAME = "D1"
-
 
         fun getdatabase(context: Context): AppDatabse {
             return sInstance ?: synchronized(this) {

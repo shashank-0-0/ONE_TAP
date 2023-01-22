@@ -1,12 +1,12 @@
-package android.example.atry
+package android.example.oneTap.Presentation
 
-import android.example.atry.Room.myLocation
+import android.example.oneTap.R
+import android.example.oneTap.Room.myLocation
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import android.widget.Toast
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
@@ -61,14 +61,8 @@ class location_Adapter(private var clickhandler: OnClickHandler) : RecyclerView.
                 mClickHandler?.onClick(difer.currentList.get(adapterPosition))
             }
         }
-
-
         override fun onClick(v: View?) {
-
         }
-
-
-
     }
 
     fun getlocation(): List<myLocation> {

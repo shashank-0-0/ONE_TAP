@@ -1,9 +1,8 @@
 package android.example.myapplication.Repository
 
-import android.example.atry.Room.LocationDao
-import android.example.atry.Room.myLocation
+import android.example.oneTap.Room.LocationDao
+import android.example.oneTap.Room.myLocation
 import android.location.Location
-import androidx.lifecycle.LiveData
 import kotlinx.coroutines.flow.Flow
 
 interface location_repository {

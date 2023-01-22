@@ -1,10 +1,13 @@
-package android.example.atry
+package android.example.oneTap.Presentation
 
 import android.app.Notification
 import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
+import android.example.oneTap.BaseApplication
+import android.example.oneTap.Presentation.ViewModel.myviewmodel
+import android.example.oneTap.R
 import android.example.myapplication.Repository.location_repository
 import android.example.myapplication.Repository.location_repository_implementation
 import android.location.Geocoder
@@ -64,7 +67,8 @@ class widgetActivity: AppCompatActivity() {
             0, notificationIntent, 0
         )
         val notification: Notification = NotificationCompat.Builder(this,
-            BaseApplication.CHANNEL_ID)
+            BaseApplication.CHANNEL_ID
+        )
             .setContentTitle("Service")
             .setContentText("saving current location")
             .setPriority(Notification.PRIORITY_HIGH)

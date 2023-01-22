@@ -1,4 +1,4 @@
-package android.example.atry
+package android.example.oneTap
 
 import android.app.Application
 import android.app.NotificationChannel

@@ -1,10 +1,10 @@
-package android.example.atry
+package android.example.oneTap.Presentation
 
-import android.content.Intent
+import android.example.oneTap.Presentation.ViewModel.myviewmodel
+import android.example.oneTap.R
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -29,7 +29,7 @@ class Save_Location_Activity : AppCompatActivity() {
                 progressBar.visibility=View.GONE
                 Toast.makeText(this@Save_Location_Activity,"LOCATION SAVED",Toast.LENGTH_SHORT).show()
                 finish()
-                overridePendingTransition(R.anim.nothing,R.anim.slide_out)
+                overridePendingTransition(R.anim.nothing, R.anim.slide_out)
             }
         }
 
@@ -46,6 +46,6 @@ class Save_Location_Activity : AppCompatActivity() {
 
     override fun onBackPressed() {
         super.onBackPressed()
-        overridePendingTransition(R.anim.nothing,R.anim.slide_out)
+        overridePendingTransition(R.anim.nothing, R.anim.slide_out)
     }
 }
