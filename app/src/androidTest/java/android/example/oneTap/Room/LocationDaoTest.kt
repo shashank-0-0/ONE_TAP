@@ -28,7 +28,7 @@ import org.junit.runner.RunWith
 class LocationDaoTest {
 
 
-    //making sure testcases stays inside the test scope
+    //making sure testcases runs one after another and stays inside the test scope
     @get:Rule
     var instantTaskExecutorRule = InstantTaskExecutorRule()
 

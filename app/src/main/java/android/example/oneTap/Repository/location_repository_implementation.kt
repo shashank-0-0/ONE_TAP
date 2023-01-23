@@ -15,11 +15,11 @@ import kotlinx.coroutines.flow.callbackFlow
 import javax.inject.Inject
 
 
-
 class location_repository_implementation
 @Inject
 constructor(
-        var fusedLocationProviderClient: FusedLocationProviderClient
+    var dao: LocationDao,
+    var fusedLocationProviderClient: FusedLocationProviderClient
 ) : location_repository {
 
 
@@ -38,7 +38,6 @@ constructor(
                 for (location in locationResult.locations) {
 
                     Log.i("#@#","got location updates ${location.latitude} ")
-//                    Toast.makeText(t,"got location", Toast.LENGTH_SHORT).show()
                     offer(Resource.Success(location))
                 }
                 fusedLocationProviderClient.removeLocationUpdates(this)
@@ -60,18 +59,16 @@ constructor(
 
     }
 
-    override suspend fun delete(dao: LocationDao, location: myLocation) {
+    override suspend fun delete(location: myLocation) {
         dao.deleteLocation(location)
     }
 
-    override suspend fun insert(dao:LocationDao, location: myLocation) {
+    override suspend fun insert(location: myLocation) {
         dao.insertnewLocation(location)
     }
 
-    override suspend fun all_locations(dao:LocationDao): Flow<List<myLocation>> {
-        return  dao.loadallLocation()
+    override suspend fun all_locations(): Flow<List<myLocation>> {
+        return dao.loadallLocation()
     }
-
-
 
 }

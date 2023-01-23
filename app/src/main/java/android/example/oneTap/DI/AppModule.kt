@@ -46,9 +46,10 @@ object AppModule {
 
     @Provides
     fun getRepository(
+        dao: LocationDao,
         fusedLocationProviderClient: FusedLocationProviderClient
     ): location_repository {
-        return location_repository_implementation(fusedLocationProviderClient)
+        return location_repository_implementation(dao, fusedLocationProviderClient)
     }
 
     @Provides

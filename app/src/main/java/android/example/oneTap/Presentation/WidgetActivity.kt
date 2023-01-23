@@ -27,11 +27,6 @@ import kotlinx.coroutines.flow.collectLatest
 @AndroidEntryPoint
 class widgetActivity: AppCompatActivity() {
 
-    private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
-    private lateinit var geocoder: Geocoder
-    private lateinit var repository: location_repository
-    private lateinit var Location_callback:LocationCallback
-    private lateinit var service_intent:Intent
     private val myviewmodel: myviewmodel by viewModels()
 
 
@@ -40,9 +35,6 @@ class widgetActivity: AppCompatActivity() {
         setContentView(R.layout.widget_activity_layout)
         Log.i("#@#", "invisible oncreate")
 
-        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this)
-        geocoder = Geocoder(this)
-        repository = location_repository_implementation(fusedLocationProviderClient)
 
         lifecycleScope.launch {
             val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager

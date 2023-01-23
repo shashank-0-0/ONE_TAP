@@ -10,9 +10,9 @@ interface location_repository {
 
 
      fun fetch_location() : Flow<Resource<Location>>
-     suspend fun insert(dao:LocationDao,location : myLocation)
-     suspend fun delete(dao:LocationDao,location : myLocation)
-     suspend fun all_locations(dao: LocationDao): Flow<List<myLocation>>?
+     suspend fun insert(location : myLocation)
+     suspend fun delete(location : myLocation)
+     suspend fun all_locations(): Flow<List<myLocation>>?
 
 
 }

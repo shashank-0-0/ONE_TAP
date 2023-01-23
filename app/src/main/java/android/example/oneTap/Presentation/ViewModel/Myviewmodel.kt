@@ -25,39 +25,37 @@ constructor(
     private val repository: location_repository,
     private val client: FusedLocationProviderClient,
     private val geocoder: Geocoder,
-    private val dao: LocationDao
 ) : AndroidViewModel(app) {
 
 
     private var _location = MutableStateFlow<List<myLocation>>(listOf())
-    val location =_location.asStateFlow()
+    val location = _location.asStateFlow()
 
     private val _state = MutableSharedFlow<Resource<String>>()
-    val state=_state.asSharedFlow()
-
+    val state = _state.asSharedFlow()
 
     init {
-        getsavedmovies(dao)
+        getsavedmovies()
     }
 
-    fun getsavedmovies(dao: LocationDao) {
+    fun getsavedmovies() {
         viewModelScope.launch {
-             repository.all_locations(dao)?.collectLatest {
-                 Log.i("#@#","got movies")
-                _location.value=it
+            repository.all_locations()?.collectLatest {
+                Log.i("#@#", "got movies")
+                _location.value = it
             }
         }
     }
 
 
-    suspend fun fetch_location(locationName: String="") {
-        Log.i("#@#","start of function")
+    suspend fun fetch_location(locationName: String = "") {
+        Log.i("#@#", "start of function")
 
         viewModelScope.launch(Dispatchers.IO) {
             repository.fetch_location().collectLatest { result ->
-                when(result){
+                when (result) {
                     is Resource.Success -> {
-                        Log.i("#@#","got the location")
+                        Log.i("#@#", "got the location")
                         var address = PermissionUtils.getcity(result.data, geocoder)
                         saveLocation(result.data, address, locationName)
                         _state.emit(Resource.Success("success"))
@@ -70,20 +68,18 @@ constructor(
                     }
                 }
             }
-            Log.i("#@#","end of coroutine scope")
+            Log.i("#@#", "end of coroutine scope")
         }
-        Log.i("#@#","end of function")
+        Log.i("#@#", "end of function")
     }
 
 
-
-     suspend fun saveLocation(location: Location?, address: String?, locationName: String?) {
+    suspend fun saveLocation(location: Location?, address: String?, locationName: String?) {
         Log.i("!@!", "start of savelocation")
 
         location?.let {
             Log.i("QWE", "start of insert $address $locationName")
             repository.insert(
-                dao,
                 myLocation(
                     lattitude = it.latitude,
                     longitude = it.longitude,
@@ -91,14 +87,13 @@ constructor(
                     address = address,
                 )
             )
-
         }
     }
+
     suspend fun deleteLocation(mylocation: myLocation?) {
         viewModelScope.launch {
             mylocation?.let {
                 repository.delete(
-                    dao,
                     mylocation
                 )
             }
