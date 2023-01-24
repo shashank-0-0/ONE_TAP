@@ -3,6 +3,21 @@
   <component name="AndroidTestResultsUserPreferences">
     <option name="androidTestResultsTableState">
       <map>
+        <entry key="-926180913">
+          <value>
+            <AndroidTestResultsTableState>
+              <option name="preferredColumnWidths">
+                <map>
+                  <entry key="Duration" value="90" />
+                  <entry key="JJV4FAE6NNPFPRZT" value="120" />
+                  <entry key="Pixel_4_API_30" value="120" />
+                  <entry key="Realme&#10; RMX1827" value="120" />
+                  <entry key="Tests" value="360" />
+                </map>
+              </option>
+            </AndroidTestResultsTableState>
+          </value>
+        </entry>
         <entry key="-765150399">
           <value>
             <AndroidTestResultsTableState>
@@ -24,7 +39,22 @@
                 <map>
                   <entry key="Duration" value="90" />
                   <entry key="JJV4FAE6NNPFPRZT" value="120" />
+                  <entry key="Pixel_4_API_30" value="120" />
                   <entry key="Realme" value="120" />
+                  <entry key="Realme&#10; RMX1827" value="120" />
+                  <entry key="Tests" value="360" />
+                </map>
+              </option>
+            </AndroidTestResultsTableState>
+          </value>
+        </entry>
+        <entry key="-69599659">
+          <value>
+            <AndroidTestResultsTableState>
+              <option name="preferredColumnWidths">
+                <map>
+                  <entry key="Duration" value="90" />
+                  <entry key="JJV4FAE6NNPFPRZT" value="120" />
                   <entry key="Realme&#10; RMX1827" value="120" />
                   <entry key="Tests" value="360" />
                 </map>
@@ -47,6 +77,21 @@
           </value>
         </entry>
         <entry key="1252978507">
+          <value>
+            <AndroidTestResultsTableState>
+              <option name="preferredColumnWidths">
+                <map>
+                  <entry key="Duration" value="90" />
+                  <entry key="JJV4FAE6NNPFPRZT" value="120" />
+                  <entry key="Realme" value="120" />
+                  <entry key="Realme&#10; RMX1827" value="120" />
+                  <entry key="Tests" value="360" />
+                </map>
+              </option>
+            </AndroidTestResultsTableState>
+          </value>
+        </entry>
+        <entry key="1647841417">
           <value>
             <AndroidTestResultsTableState>
               <option name="preferredColumnWidths">

@@ -25,6 +25,7 @@ constructor(
 
     @OptIn(ExperimentalCoroutinesApi::class)
     @SuppressLint("MissingPermission")
+
     override fun fetch_location() = callbackFlow<Resource<Location>> {
         Log.i("#@#","start of fetch location ")
         offer(Resource.Loading())
@@ -43,7 +44,6 @@ constructor(
                 fusedLocationProviderClient.removeLocationUpdates(this)
             }
         }
-
         fusedLocationProviderClient.requestLocationUpdates(
             locationRequest,
             location_callback,
@@ -56,7 +56,6 @@ constructor(
             fusedLocationProviderClient.removeLocationUpdates(location_callback)
         }
         Log.i("#@#","end of fetch location")
-
     }
 
     override suspend fun delete(location: myLocation) {
