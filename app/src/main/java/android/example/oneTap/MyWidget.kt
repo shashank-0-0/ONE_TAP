@@ -12,10 +12,9 @@ import android.widget.RemoteViews
 
 /**
  * Implementation of App Widget functionality.
+ * broadcast receiver for the widget
  */
 class MyWidget : AppWidgetProvider() {
-
-
 
     override fun onUpdate(
         context: Context,
@@ -24,13 +23,10 @@ class MyWidget : AppWidgetProvider() {
     ) {
         // There may be multiple widgets active, so update all of them
         for (appWidgetId in appWidgetIds) {
-            Log.i("#@#","onupdate(")
+            Log.i("#@#", "onupdate(")
             val views = RemoteViews(context.packageName, R.layout.my_widget)
-            // Set the icon for the ImageView
-//            views.setImageViewResource(R.id.icon, R.drawable.ic_location)
-            // Set the PendingIntent for the ImageView
             val intent = Intent(context, MyWidget::class.java)
-            intent.action =  "com.example.MyWidget.WIDGET_CLICK"
+            intent.action = "com.example.MyWidget.WIDGET_CLICK"
             val pendingIntent = PendingIntent.getBroadcast(context, 0, intent, 0)
             views.setOnClickPendingIntent(R.id.image_icon, pendingIntent)
             // Update the app widget
@@ -39,26 +35,18 @@ class MyWidget : AppWidgetProvider() {
     }
 
 
-
+    //starting the invisible widget activity
     override fun onReceive(context: Context, intent: Intent) {
         super.onReceive(context, intent)
         if (intent.action == "com.example.MyWidget.WIDGET_CLICK") {
             // Start the LocationService
-            Log.i("#@#","onreceive()");
+            Log.i("#@#", "onreceive()");
 
             val intent = Intent(context, widgetActivity::class.java)
-            intent.flags=Intent.FLAG_ACTIVITY_NEW_TASK
-//            intent.action = saveLocationService.ACTION_GET_LOCATION
+            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
             context.startActivity(intent)
         }
     }
 
-    override fun onEnabled(context: Context) {
-        // Enter relevant functionality for when the first widget is created
-    }
-
-    override fun onDisabled(context: Context) {
-        // Enter relevant functionality for when the last widget is disabled
-    }
 }
 

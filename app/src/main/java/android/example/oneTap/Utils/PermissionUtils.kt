@@ -62,18 +62,17 @@ object PermissionUtils {
             }
             .show()
     }
-    fun getcity(location: Location?, geocoder: Geocoder): String {
+    fun getcity(location: Location?, geocoder: Geocoder?): String {
         var address = ""
         location?.let {
 
-            val addresses = geocoder.getFromLocation(location.latitude, location.longitude, 1)
+            val addresses = geocoder?.getFromLocation(location.latitude, location.longitude, 1)
             val city = addresses?.get(0)?.locality
             val state = addresses?.get(0)?.adminArea
             val subarea = addresses?.get(0)?.subLocality
-            Log.i("QWE", addresses?.get(0)?.subLocality.toString())
+//            Log.i("QWE", addresses?.get(0)?.subLocality.toString())
             address = subarea + "," + city
         }
-        Log.i("QWE", "$address")
 
         return address
     }

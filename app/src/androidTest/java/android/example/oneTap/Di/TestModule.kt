@@ -10,9 +10,11 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Named
 
+//Declaring dependencies for test cases
 @Module
 @InstallIn(SingletonComponent::class)
 object TestModule {
+
 
     @Provides
     @Named("test_db")

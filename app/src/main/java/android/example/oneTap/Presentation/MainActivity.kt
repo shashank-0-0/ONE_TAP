@@ -25,7 +25,7 @@ import java.util.*
 
 
 @AndroidEntryPoint
-class MainActivity : AppCompatActivity(),LifecycleObserver, location_Adapter.OnClickHandler {
+class MainActivity : AppCompatActivity(), LifecycleObserver, location_Adapter.OnClickHandler {
 
     private lateinit var madapter: location_Adapter
 
@@ -43,16 +43,13 @@ class MainActivity : AppCompatActivity(),LifecycleObserver, location_Adapter.OnC
         init_recyclerview()
         adddataset()
 
+        //making sure we have permission to access location before fetching location
         save_location_cards_view.setOnClickListener {
             when {
                 PermissionUtils.isAccessFineLocationGranted(this) -> {
                     when {
                         PermissionUtils.isLocationEnabled(this) -> {
-
-                            val intent=Intent(this, Save_Location_Activity::class.java)
-                            startActivity(intent)
-
-                            overridePendingTransition(R.anim.slide_in, R.anim.nothing)
+                            startSaveLocationActivity()
                         }
                         else -> {
 
@@ -70,16 +67,34 @@ class MainActivity : AppCompatActivity(),LifecycleObserver, location_Adapter.OnC
         }
 
     }
+
+//    initializing the recycler view
     private fun init_recyclerview() {
         recyclerview_fragmentc?.apply {
             layoutManager = LinearLayoutManager(this.context, RecyclerView.VERTICAL, false)
             madapter = location_Adapter(this@MainActivity)
             adapter = madapter
         }
-        //swipe functionality of recycler view items
+        addSwipeFunctionality()
+
+    }
+//    adding data to the recycler view
+    private fun adddataset() {
+        lifecycleScope.launch {
+            myviewmodel.location.collectLatest {
+                Log.i("#@#", "collected ${it.size}")
+                madapter.difer.submitList(it)
+            }
+        }
+    }
+
+    //swipe functionality for recycler view items
+    private fun addSwipeFunctionality() {
         val simpleItemTouchCallback: ItemTouchHelper.SimpleCallback = object :
-            ItemTouchHelper.SimpleCallback(0,
-                ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT) {
+            ItemTouchHelper.SimpleCallback(
+                0,
+                ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT
+            ) {
             override fun onMove(
                 recyclerView: RecyclerView,
                 viewHolder: RecyclerView.ViewHolder,
@@ -87,6 +102,7 @@ class MainActivity : AppCompatActivity(),LifecycleObserver, location_Adapter.OnC
             ): Boolean {
                 return false
             }
+
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, swipeDir: Int) {
 
                 //Remove swiped item from list and notify the RecyclerView
@@ -94,7 +110,11 @@ class MainActivity : AppCompatActivity(),LifecycleObserver, location_Adapter.OnC
                 lifecycleScope.launch {
                     myviewmodel.deleteLocation(madapter.getlocation().get(position))
                 }
-                Toast.makeText(applicationContext, "Deleted ${madapter.getlocation().get(position).name}", Toast.LENGTH_SHORT)
+                Toast.makeText(
+                    applicationContext,
+                    "Deleted ${madapter.getlocation().get(position).name}",
+                    Toast.LENGTH_SHORT
+                )
                     .show()
             }
         }
@@ -102,14 +122,6 @@ class MainActivity : AppCompatActivity(),LifecycleObserver, location_Adapter.OnC
         itemTouchHelper.attachToRecyclerView(recyclerview_fragmentc)
     }
 
-    private fun adddataset() {
-        lifecycleScope.launch{
-            myviewmodel.location.collectLatest {
-                Log.i("#@#", "collected ${it.size}")
-                madapter.difer.submitList(it)
-            }
-        }
-    }
 
 
 
@@ -119,27 +131,21 @@ class MainActivity : AppCompatActivity(),LifecycleObserver, location_Adapter.OnC
         grantResults: IntArray
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        Log.i("!@!", "yooooo")
         when (requestCode) {
             LOCATION_PERMISSION_REQUEST_CODE -> {
-                Log.i("!@!", "yooooo 1")
 
                 if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    Log.i("!@!", "yooooo 2")
 
                     when {
 
                         PermissionUtils.isLocationEnabled(this) -> {
-                            Log.i("!@!", "yooooo 3")
-                            //DO something if you want to
+                            startSaveLocationActivity()
                         }
                         else -> {
-                            Log.i("!@!", "yooooo 4")
                             PermissionUtils.showGPSNotEnabledDialog(this)
                         }
                     }
                 } else {
-                    Log.i("!@!", "yooooo 5")
 
                     Toast.makeText(
                         this,
@@ -152,6 +158,7 @@ class MainActivity : AppCompatActivity(),LifecycleObserver, location_Adapter.OnC
     }
 
 
+//    handling click on the recyclerview items
     override fun onClick(m: myLocation?) {
         Log.i("!@!", "pressed travel to")
         val uri = java.lang.String.format(
@@ -162,6 +169,12 @@ class MainActivity : AppCompatActivity(),LifecycleObserver, location_Adapter.OnC
         )
         val intent = Intent(Intent.ACTION_VIEW, Uri.parse(uri))
         startActivity(intent)
+    }
+
+    private fun startSaveLocationActivity() {
+        val intent = Intent(this, Save_Location_Activity::class.java)
+        startActivity(intent)
+        overridePendingTransition(R.anim.slide_in, R.anim.nothing)
     }
 
 

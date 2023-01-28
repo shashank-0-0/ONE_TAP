@@ -15,7 +15,7 @@ import kotlinx.coroutines.flow.callbackFlow
 import javax.inject.Inject
 
 
-class location_repository_implementation
+open class location_repository_implementation
 @Inject
 constructor(
     var dao: LocationDao,
@@ -27,7 +27,6 @@ constructor(
     @SuppressLint("MissingPermission")
 
     override fun fetch_location() = callbackFlow<Resource<Location>> {
-        Log.i("#@#","start of fetch location ")
         offer(Resource.Loading())
 
         val locationRequest = LocationRequest().setInterval(2000).setFastestInterval(2000)
@@ -38,7 +37,6 @@ constructor(
                 super.onLocationResult(locationResult)
                 for (location in locationResult.locations) {
 
-                    Log.i("#@#","got location updates ${location.latitude} ")
                     offer(Resource.Success(location))
                 }
                 fusedLocationProviderClient.removeLocationUpdates(this)
@@ -55,7 +53,6 @@ constructor(
         awaitClose {
             fusedLocationProviderClient.removeLocationUpdates(location_callback)
         }
-        Log.i("#@#","end of fetch location")
     }
 
     override suspend fun delete(location: myLocation) {

@@ -8,7 +8,6 @@ import kotlinx.coroutines.flow.Flow
 
 interface location_repository {
 
-
      fun fetch_location() : Flow<Resource<Location>>
      suspend fun insert(location : myLocation)
      suspend fun delete(location : myLocation)

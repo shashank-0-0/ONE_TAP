@@ -25,10 +25,9 @@ class LocationDaoTest {
     @get:Rule
     var hiltRule = HiltAndroidRule(this)
 
-    //making sure testcases runs one after another and stays inside the test scope
+    //making sure testcases runs one after another(synchronously) and stays inside the test scope
     @get:Rule
     var instantTaskExecutorRule = InstantTaskExecutorRule()
-
 
 
     @Inject
@@ -45,6 +44,7 @@ class LocationDaoTest {
         dao = database.getLocationdao()
     }
 
+    //making sure the database instance is closed in the end
     @After
     fun tearDown() {
         database.close()
@@ -52,19 +52,18 @@ class LocationDaoTest {
 
 
     @Test
-    fun insertNewLocation() = runBlockingTest {
+    fun insertNewLocation_test() = runBlockingTest {
         val location = myLocation(1, 4.55, 5.66, "name", "address")
         val location1 = myLocation(2, 6.55, 7.66, "name1", "address1")
         dao.insertnewLocation(location)
         dao.insertnewLocation(location1)
-
         val locations = dao.loadallLocation().take(1)
 
         assertThat(locations.toList().get(0)).contains(location1)
     }
 
     @Test
-    fun deleteLocation() = runBlockingTest {
+    fun deleteLocation_test() = runBlockingTest {
         val location = myLocation(1, 4.55, 5.66, "name", "address")
         val location1 = myLocation(2, 6.55, 7.66, "name1", "address1")
         dao.insertnewLocation(location)

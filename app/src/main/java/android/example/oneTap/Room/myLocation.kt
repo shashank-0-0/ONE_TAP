@@ -4,7 +4,7 @@ package android.example.oneTap.Room
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
-
+//entity class for ROOM
 @Entity(tableName = "Location")
 data class myLocation(
     @PrimaryKey(autoGenerate = true)

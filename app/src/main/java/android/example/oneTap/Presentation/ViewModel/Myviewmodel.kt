@@ -1,16 +1,13 @@
 package android.example.oneTap.Presentation.ViewModel
 
-import android.app.Application
-import android.example.oneTap.Utils.PermissionUtils
-import android.example.oneTap.Room.LocationDao
-import android.example.oneTap.Room.myLocation
 import android.example.myapplication.Repository.location_repository
+import android.example.oneTap.Room.myLocation
+import android.example.oneTap.Utils.PermissionUtils
 import android.example.oneTap.Utils.Resource
 import android.location.Geocoder
 import android.location.Location
-import android.util.Log
-import androidx.lifecycle.*
-import com.google.android.gms.location.*
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.*
@@ -21,11 +18,9 @@ import javax.inject.Inject
 class myviewmodel
 @Inject
 constructor(
-    app: Application,
     private val repository: location_repository,
-    private val client: FusedLocationProviderClient,
     private val geocoder: Geocoder,
-) : AndroidViewModel(app) {
+) : ViewModel() {
 
 
     private var _location = MutableStateFlow<List<myLocation>>(listOf())
@@ -35,27 +30,25 @@ constructor(
     val state = _state.asSharedFlow()
 
     init {
-        getsavedmovies()
+        getSavedLocations()
     }
 
-    fun getsavedmovies() {
+    //function to fetch all saved locations from database
+    fun getSavedLocations() {
         viewModelScope.launch {
             repository.all_locations()?.collectLatest {
-                Log.i("#@#", "got movies")
                 _location.value = it
             }
         }
     }
 
-
+//    fethcing the location and saving it in database
     suspend fun fetch_location(locationName: String = "") {
-        Log.i("#@#", "start of function")
 
         viewModelScope.launch(Dispatchers.IO) {
             repository.fetch_location().collectLatest { result ->
                 when (result) {
                     is Resource.Success -> {
-                        Log.i("#@#", "got the location")
                         var address = PermissionUtils.getcity(result.data, geocoder)
                         saveLocation(result.data, address, locationName)
                         _state.emit(Resource.Success("success"))
@@ -68,17 +61,14 @@ constructor(
                     }
                 }
             }
-            Log.i("#@#", "end of coroutine scope")
+
         }
-        Log.i("#@#", "end of function")
     }
 
 
+//    function to save the fetched location in the database
     suspend fun saveLocation(location: Location?, address: String?, locationName: String?) {
-        Log.i("!@!", "start of savelocation")
-
         location?.let {
-            Log.i("QWE", "start of insert $address $locationName")
             repository.insert(
                 myLocation(
                     lattitude = it.latitude,
@@ -90,6 +80,7 @@ constructor(
         }
     }
 
+//    function to delete the saved location
     suspend fun deleteLocation(mylocation: myLocation?) {
         viewModelScope.launch {
             mylocation?.let {

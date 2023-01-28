@@ -10,6 +10,7 @@ import android.example.oneTap.Presentation.ViewModel.myviewmodel
 import android.example.oneTap.R
 import android.example.myapplication.Repository.location_repository
 import android.example.myapplication.Repository.location_repository_implementation
+import android.example.oneTap.Utils.Resource
 import android.location.Geocoder
 import android.os.Bundle
 import android.util.Log
@@ -23,28 +24,34 @@ import androidx.lifecycle.lifecycleScope
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 
+//Invisible activity that saves the location
 
 @AndroidEntryPoint
 class widgetActivity: AppCompatActivity() {
 
     private val myviewmodel: myviewmodel by viewModels()
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.widget_activity_layout)
         Log.i("#@#", "invisible oncreate")
 
-
         lifecycleScope.launch {
             val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
             notificationManager.notify(NOTIFICATION_ID,buildNotification())
             myviewmodel.fetch_location()
-            myviewmodel.state.collectLatest {
-                Log.i("#@#","yooooooooooo")
-                notificationManager.cancel(NOTIFICATION_ID)
-                Toast.makeText(this@widgetActivity,"LOCATION SAVED",Toast.LENGTH_SHORT).show()
-                finish()
+            myviewmodel.state.collectLatest {result ->
+                when(result){
+                    is Resource.Success -> {
+                        notificationManager.cancel(NOTIFICATION_ID)
+                        Toast.makeText(this@widgetActivity,"LOCATION SAVED",Toast.LENGTH_SHORT).show()
+                        finish()
+                    }
+                    is Resource.Error ->{
+                        Toast.makeText(this@widgetActivity,"Some Error Occured",Toast.LENGTH_SHORT).show()
+                        finish()
+                    }
+                }
             }
         }
     }

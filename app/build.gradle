@@ -1,6 +1,5 @@
 plugins {
 
-
     id 'com.android.application'
     id 'kotlin-android'
     id 'kotlin-android-extensions'
@@ -48,6 +47,9 @@ android {
 
 dependencies {
 
+    testImplementation 'junit:junit:4.12'
+    testImplementation 'junit:junit:4.12'
+    testImplementation 'junit:junit:4.12'
     testImplementation 'junit:junit:4.12'
     testImplementation 'junit:junit:4.12'
     testImplementation 'junit:junit:4.12'
@@ -106,10 +108,16 @@ dependencies {
     kapt "androidx.room:room-compiler:2.2.5"
 
     //Instrumented Unit Test
-    androidTestImplementation "com.linkedin.dexmaker:dexmaker-mockito:2.12.1"
+//    androidTestImplementation "com.linkedin.dexmaker:dexmaker-mockito:2.12.1"
     androidTestImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:1.2.1"
     androidTestImplementation "androidx.arch.core:core-testing:2.1.0"
     androidTestImplementation "com.google.truth:truth:1.0.1"
+    testImplementation "com.google.truth:truth:1.0.1"
+    testImplementation "androidx.arch.core:core-testing:2.1.0"
+    testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:1.2.1"
+    implementation("io.mockk:mockk:1.11.0")
+
+
     //hilt for testing
     androidTestImplementation 'com.google.dagger:hilt-android-testing:2.38.1'
     kaptAndroidTest 'com.google.dagger:hilt-android-compiler:2.38.1'

@@ -26,29 +26,13 @@ class Save_Location_Activity : AppCompatActivity() {
 
         lifecycleScope.launch {
             myviewmodel.state.collectLatest { result ->
-                when(result){
-                    is Resource.Success ->{
-                        progressBar.progress=100
-                        progressBar.visibility=View.GONE
-                        Toast.makeText(this@Save_Location_Activity,"LOCATION SAVED",Toast.LENGTH_SHORT).show()
-                        finish()
-                        overridePendingTransition(R.anim.nothing, R.anim.slide_out)
-                    }
-                    is Resource.Error ->{
-                        progressBar.visibility=View.GONE
-                        Toast.makeText(this@Save_Location_Activity,"${result.message}",Toast.LENGTH_SHORT).show()
-                    }
-                    is Resource.Loading ->{
-                        progressBar.visibility= View.VISIBLE
-                    }
-                }
+                handleScreenState(result)
             }
         }
 
         save_.setOnClickListener {
             val userEnteredname =outlinedTextField.editText?.text.toString()
             save_.isEnabled=false
-            Log.i("#@#","Save location clicked")
             lifecycleScope.launch {
                 myviewmodel.fetch_location(userEnteredname)
             }
@@ -58,5 +42,23 @@ class Save_Location_Activity : AppCompatActivity() {
     override fun onBackPressed() {
         super.onBackPressed()
         overridePendingTransition(R.anim.nothing, R.anim.slide_out)
+    }
+    private fun handleScreenState(result:Resource<String>){
+        when(result){
+            is Resource.Success ->{
+                progressBar.progress=100
+                progressBar.visibility=View.GONE
+                Toast.makeText(this@Save_Location_Activity,"LOCATION SAVED",Toast.LENGTH_SHORT).show()
+                finish()
+                overridePendingTransition(R.anim.nothing, R.anim.slide_out)
+            }
+            is Resource.Error ->{
+                progressBar.visibility=View.GONE
+                Toast.makeText(this@Save_Location_Activity,"${result.message}",Toast.LENGTH_SHORT).show()
+            }
+            is Resource.Loading ->{
+                progressBar.visibility= View.VISIBLE
+            }
+        }
     }
 }

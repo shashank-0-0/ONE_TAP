@@ -4,6 +4,7 @@ import androidx.room.*
 import kotlinx.coroutines.flow.Flow
 
 
+//Defining the dao
 @Dao
 interface LocationDao  {
 

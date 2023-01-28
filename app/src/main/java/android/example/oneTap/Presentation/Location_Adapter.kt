@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 
+//Adapter for our recycler view
 class location_Adapter(private var clickhandler: OnClickHandler) : RecyclerView.Adapter<location_Adapter.customviewholder>() {
     private var items: List<myLocation> = ArrayList()
     private var mClickHandler: OnClickHandler? = null
@@ -19,11 +20,9 @@ class location_Adapter(private var clickhandler: OnClickHandler) : RecyclerView.
     init {
         mClickHandler=clickhandler
     }
-
     interface OnClickHandler {
         fun onClick(m: myLocation?)
     }
-
 
     override fun getItemCount(): Int {
         return difer.currentList.size
